@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
     <record id="stock_pack_products_action" model="ir.actions.act_window">
@@ -43,8 +43,17 @@
                         </page>
                     </notebook>
                     <footer>
-                        <button name="action_pack" string="Pack Products" type="object" class="btn-primary" />
-                        <button string="Discard" class="btn-secondary" special="cancel" />
+                        <button
+                            name="action_pack"
+                            string="Pack Products"
+                            type="object"
+                            class="btn-primary"
+                        />
+                        <button
+                            string="Discard"
+                            class="btn-secondary"
+                            special="cancel"
+                        />
                     </footer>
                 </sheet>
             </form>

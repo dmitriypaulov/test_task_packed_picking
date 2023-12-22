@@ -1,11 +1,11 @@
-from odoo import _, fields, models
+from odoo import fields, models
 
 
 class PackProducts(models.TransientModel):
     _name = "stock.pack.products"
     _description = "Pack Products"
 
-    package_name = fields.Char(string="Package Name")
+    package_name = fields.Char()
     operation_type_id = fields.Many2one(
         comodel_name="stock.picking.type",
         string="Operation Type",
@@ -16,26 +16,18 @@ class PackProducts(models.TransientModel):
         string="Owner",
     )
     location_id = fields.Many2one(
-        comodel_name="stock.location",
+        "stock.location",
         string="Location",
     )
     location_dest_id = fields.Many2one(
-        comodel_name="stock.location",
-        string="Location Destination"
+        "stock.location",
+        string="Location Destination",
     )
     create_lots = fields.Boolean(
-        string="Create Lots",
-        help=_(
-            "If checked, system will create lots "
-            "for the products automatically."
-        )
+        help="If checked, system will create lots for the products automatically.",
     )
     set_ready = fields.Boolean(
-        string="Set Ready",
-        help=_(
-            "If checked, system will try to "
-            "set picking to the 'Ready' state."
-        )
+        help="If checked, system will try to set picking to the 'Ready' state.",
     )
     line_ids = fields.One2many(
         comodel_name="stock.pack.products.line",

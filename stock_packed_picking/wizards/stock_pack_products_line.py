@@ -14,9 +14,7 @@ class PackProductsLine(models.TransientModel):
         string="Quantity Done",
         required=True,
     )
-    serial = fields.Char(
-        string="Serial",
-    )
+    serial = fields.Char()
     pack_products_id = fields.Many2one(
         comodel_name="stock.pack.products",
     )
