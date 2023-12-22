@@ -7,7 +7,6 @@ class PackProductsLine(models.TransientModel):
 
     product_id = fields.Many2one(
         comodel_name="product.product",
-        string="Product",
         required=True,
     )
     qty_done = fields.Float(
