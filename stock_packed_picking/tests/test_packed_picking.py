@@ -7,8 +7,6 @@ class TestPackedPicking(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         product_product = cls.env["product.product"]
-        cls.location_1 = cls.env.ref("stock.warehouse0")
-        cls.location_2 = cls.env.ref("stock.location_order")
         cls.product_1 = product_product.create(
             {"name": "Packed Thing 1", "type": "product"}
         )
@@ -18,7 +16,7 @@ class TestPackedPicking(TransactionCase):
         cls.product_3 = product_product.create(
             {"name": "Packed Thing 3", "type": "product"}
         )
-        cls.operation_type = cls.env.ref("stock.picking_type_out")
+        cls.operation_type = cls.env.ref("stock.picking_type_internal")
 
     def test_packed_picking(self):
         # Test package creation without additional options
@@ -29,8 +27,6 @@ class TestPackedPicking(TransactionCase):
                 {
                     "operation_type_id": self.operation_type.id,
                     "package_name": "Test Package",
-                    "location_id": self.location_1.id,
-                    "location_dest_id": self.location_2.id,
                     "line_ids": [
                         (0, 0, {"product_id": self.product_1.id, "qty_done": 1}),
                         (0, 0, {"product_id": self.product_2.id, "qty_done": 2}),
@@ -58,8 +54,6 @@ class TestPackedPicking(TransactionCase):
             .create(
                 {
                     "operation_type_id": self.operation_type.id,
-                    "location_id": self.location_1.id,
-                    "location_dest_id": self.location_2.id,
                     "line_ids": [
                         (
                             0,
@@ -96,8 +90,6 @@ class TestPackedPicking(TransactionCase):
             .create(
                 {
                     "operation_type_id": self.operation_type.id,
-                    "location_id": self.location_1.id,
-                    "location_dest_id": self.location_2.id,
                     "line_ids": [
                         (0, 0, {"product_id": self.product_1.id, "qty_done": 1}),
                         (0, 0, {"product_id": self.product_2.id, "qty_done": 2}),

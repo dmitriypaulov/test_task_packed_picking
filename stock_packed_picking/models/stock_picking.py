@@ -12,20 +12,17 @@ class Picking(models.Model):
         owner=None,
         location=None,
         location_dest_id=None,
-        create_lots=False,
     ):
+        location = location or operation_type.default_location_src_id
+        location_dest_id = location_dest_id or operation_type.default_location_dest_id
         vals = {
             "picking_type_id": operation_type.id,
             "owner_id": owner.id if owner else False,
-            "move_ids": [
+            "move_line_ids": [
                 Command.create(
-                    self._prepare_stock_move_vals(
+                    self._prepare_stock_move_line_vals(
                         product_id=move_vals[0],
                         qty_done=move_vals[1],
-                        serial=move_vals[2] if len(move_vals) > 2 else None,
-                        location=location,
-                        location_dest_id=location_dest_id,
-                        create_lots=create_lots,
                     )
                 )
                 for move_vals in stock_move_data
@@ -38,49 +35,25 @@ class Picking(models.Model):
         return vals
 
     @api.model
-    def _prepare_stock_move_vals(
+    def _prepare_stock_move_line_vals(
         self,
         product_id,
         qty_done,
-        serial=None,
-        location=None,
-        location_dest_id=None,
-        create_lots=False,
     ):
-        vals = {
+        return {
             "product_id": product_id,
-            "name": self.env["product.product"].browse(product_id).name,
-            "move_line_ids": [
-                Command.create(
-                    {
-                        "product_id": product_id,
-                        "qty_done": qty_done,
-                        "lot_id": Command.create(
-                            self._prepare_stock_lot_vals(
-                                product_id=product_id,
-                                serial=serial,
-                            )
-                        )
-                        if create_lots
-                        else False,
-                    }
-                )
-            ],
+            "qty_done": qty_done,
         }
-        if location:
-            vals["location_id"] = location.id
-        if location_dest_id:
-            vals["location_dest_id"] = location_dest_id.id
-        return vals
 
     @api.model
     def _prepare_stock_lot_vals(
         self,
-        product_id,
+        move_line,
         serial=None,
     ):
         vals = {
-            "product_id": product_id,
+            "product_id": move_line.product_id.id,
+            "company_id": move_line.company_id.id,
         }
         if serial:
             vals["name"] = serial
@@ -135,9 +108,22 @@ class Picking(models.Model):
                 owner=owner,
                 location=location,
                 location_dest_id=location_dest_id,
-                create_lots=create_lots,
             )
         )
+
+        if create_lots:
+            lots = self.env["stock.lot"].create(
+                [
+                    self._prepare_stock_lot_vals(
+                        move_line=m_line, serial=vals[2] if len(vals) > 2 else False
+                    )
+                    for m_line, vals in zip(
+                        picking.move_line_ids, stock_move_data, strict=False
+                    )
+                ]
+            )
+            for m_line, lot in zip(picking.move_line_ids, lots, strict=False):
+                m_line.lot_id = lot
 
         if set_ready:
             picking.action_confirm()
