@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "test_task_packed_picking"
+version = "0.0.0"
+description = ""
+authors = ["Cetmix, Odoo Community Association (OCA)"]
+license = "AGPL-3"
+
+[tool.poetry.dependencies]
+python = "^3.8.0"
+
+[tool.poetry.dev-dependencies]
+copier = ">=9"
+pytest = "*"
+pre-commit = "*"
+pytest-xdist = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# ruff
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.lint]
+extend-select = [
+    "UP",  # pyupgrade
+    "I",  # isort
+]

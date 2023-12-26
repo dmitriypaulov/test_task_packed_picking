@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="stock_pack_products_menu"
+        name="Pack Products"
+        action="stock_pack_products_action"
+        groups="stock.group_tracking_lot"
+        parent="stock.menu_stock_inventory_control"
+        sequence="103"
+    />
+
+</odoo>

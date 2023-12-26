@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="stock_pack_products_action" model="ir.actions.act_window">
+        <field name="name">Pack Products</field>
+        <field name="res_model">stock.pack.products</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'go_to_picking': 1}</field>
+    </record>
+
+    <record id="stock_pack_products_view_form" model="ir.ui.view">
+        <field name="name">stock.pack.products.view.form</field>
+        <field name="model">stock.pack.products</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h3 class="oe_title">
+                        <label for="package_name" class="oe_edit_only" />
+                        <field name="package_name" />
+                    </h3>
+                    <group>
+                        <group name="general" string="General">
+                            <field name="operation_type_id" />
+                            <field name="location_id" />
+                            <field name="location_dest_id" />
+                            <field name="owner_id" />
+                        </group>
+                        <group name="options" string="Options">
+                            <field name="create_lots" />
+                            <field name="set_ready" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="operations" string="Operations">
+                            <field name="line_ids">
+                                <tree editable="top">
+                                    <field name="product_id" />
+                                    <field name="qty_done" />
+                                    <field name="serial" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button
+                            name="action_pack"
+                            string="Pack Products"
+                            type="object"
+                            class="btn-primary"
+                        />
+                        <button
+                            string="Discard"
+                            class="btn-secondary"
+                            special="cancel"
+                        />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
